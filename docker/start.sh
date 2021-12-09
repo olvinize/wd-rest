@@ -2,7 +2,7 @@
 
 if [ "${ENV}" = "PROD" ]
 then
-  composer install --no-dev --optimize-autoloade
+  composer install --no-dev --optimize-autoloader
 else
   composer install
 fi
