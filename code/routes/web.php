@@ -15,22 +15,19 @@
 
 use App\Models\EnglishTransformer;
 use App\Models\LatvianTransformer;
-use NumberToWords\NumberToWords;
+use Illuminate\Http\Request;
 
-$router->get('/', function (\Illuminate\Http\Request $request) use ($router) {
+$router->get('/', function (Request $request) use ($router) {
     $language = $request->get('lang');
     $number = (int)$request->get('n', -1);
 
     if ($number >= 0 && $number < 10000) {
-        $numberTransformer = null;
-        switch ($language) {
-            case 'eng':
-                $numberTransformer = new EnglishTransformer();
-                break;
-            case 'lat':
-                $numberTransformer = new LatvianTransformer();
-                break;
-        }
+        $transformers = [
+            'eng' => EnglishTransformer::class,
+            'lat' => LatvianTransformer::class
+        ];
+
+        $numberTransformer = is_string($transformers[$language]) ? new $transformers[$language]() : null;
         return $numberTransformer ? $numberTransformer->translate($number) : null;
     }
     return null;
