@@ -6,17 +6,15 @@ Minimum PHP version is 7.4 (default 8.0)
 
 ## Setup
 
+Clone project from GIT
 ```
-//Clonning project
 $ git clone https://github.com/olvinize/wd-rest.git
-
-//Starting docker containers
-$ docker-compose -f wd-rest/docker/docker-compose.yml up -d
-
-//Installing composer dependencies to wd/php-app container
-$ docker exec -it <wd/php-app container name or id> composer install --no-dev
 ```
 
+Update **docker/.env** file if necessary (see Docker configuration) and start docker containers
+```
+$ docker-compose -f wd-rest/docker/docker-compose.yml up -d
+```
 To test service, open in browser
 
 ```
@@ -43,9 +41,11 @@ Passing none or incorrect  parameters, will display empty string.
   * routes/web.php - default routing
 * docker - docker configuration
   * docker/.env - docker containers customization file
+  * docker/start.sh - entrypoint for app container. Specifies how composer should extract dependencies based in ENV configuration
 
 ## Docker configuration
 Docker can be customized through docker/.env file. Accepts following arguments:
 * PROXY_PORT - change browser port, if 80 is busy (default 81)
 * PHP_VERSION - php version to use. Minimum supported version is 7.4 (default 8.0)
 * TZ - container timezone (default Europe/Riga)
+* ENV - deployment configuration DEV or PROD (optimizes autoloader, removes composer dev dependencies).  (default DEV)
