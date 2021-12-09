@@ -27,7 +27,7 @@ $router->get('/', function (Request $request) use ($router) {
             'lat' => LatvianTransformer::class
         ];
 
-        $numberTransformer = is_string($transformers[$language]) ? new $transformers[$language]() : null;
+        $numberTransformer = isset($transformers[$language]) ? new $transformers[$language]() : null;
         return $numberTransformer ? $numberTransformer->translate($number) : null;
     }
     return null;
