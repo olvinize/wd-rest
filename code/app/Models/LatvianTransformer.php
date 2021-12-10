@@ -56,7 +56,6 @@ class LatvianTransformer implements NumberTransformerInterface
             return $this->negative . $this->spellNumber(abs($number));
         }
 
-        $remainder = null;
         $plural = false;
         $base = pow(1000, (int)((strlen($number) - 1) / 3));
         if ($base < 1000) { // 0 - 999
@@ -65,13 +64,10 @@ class LatvianTransformer implements NumberTransformerInterface
             if ($units) { // 100 - 999
                 $remainder = $number % 100;
                 $plural = $units > 1;
-            } else if ($number < 21) { // 0-20
+            } else { // 0-99
                 $base = null;
-                $units = $number;
-            } else { // 21 - 99
-                $base = null;
-                $units = (int)($number / 10) * 10;
-                $remainder = $number % 10;
+                $units = $number < 21 ? $number : (int)($number / 10) * 10;
+                $remainder = $number < 21 ? null : $number % 10;
             }
             $string = $this->spell($units) . ($base ? $this->separator . $this->spell($base, $plural) : '');
         } else { // >= 1000

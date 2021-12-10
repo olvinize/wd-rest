@@ -2,33 +2,19 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
-*/
-
-use App\Models\EnglishTransformer;
-use App\Models\LatvianTransformer;
+use App\Models\Transformer;
 use Illuminate\Http\Request;
 
-$router->get('/', function (Request $request) use ($router) {
-    $language = $request->get('lang');
-    $number = (int)$request->get('n', -1);
+$router->get('/', function (Request $request) {
+    /** @var $this \Laravel\Lumen\Routing\Closure */
+    try {
+        $this->validate($request, Transformer::getValidationRules());
 
-    if ($number >= 0 && $number < 10000) {
-        $transformers = [
-            'eng' => EnglishTransformer::class,
-            'lat' => LatvianTransformer::class
-        ];
+        $transformer = Transformer::create($request->get('lang'));
+        //return response()->json($transformer->translate((int)$request->get('n')));
+        return $transformer->translate((int)$request->get('n'));
+    } catch (Exception $e) {
 
-        $numberTransformer = isset($transformers[$language]) ? new $transformers[$language]() : null;
-        return $numberTransformer ? $numberTransformer->translate($number) : null;
     }
     return null;
 });

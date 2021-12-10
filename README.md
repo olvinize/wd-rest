@@ -1,5 +1,5 @@
 # wd-rest
-REST service converts numbers to words. Uses Lumen framework for routing.
+REST service converts numbers to words. Uses Lumen framework for routing. Supported languages: LV, EN. Numbers range from 0 to 9999.
 
 ## Requirements
 Minimum PHP version is 7.4 (default 8.0)
